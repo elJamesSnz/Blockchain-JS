@@ -1,0 +1,12 @@
+{
+    "extends": "airbnb-base", //extender normas
+    "env": //entorno
+    {
+        "jest": true,
+        "node": true
+    },
+    "rules":{ //se colocan reglas
+        "max-len": [1, 120, {"tabWidth": 2, "ignoreComments": true }] 
+        //másx len longitud líneas de código  -opcional
+    }
+}
