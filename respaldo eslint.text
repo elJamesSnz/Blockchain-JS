@@ -18,3 +18,10 @@
     "nodemon": "^2.0.7"
   }
 }
+
+
+  static get genesis(){ //genera instancia del nodo bloque
+        const timestamp = (new Date(2021, 0, 1).getTime());
+        const hash = Block._hash(timestamp, '0', 'genesis');
+        return new this(timestamp, undefined, hash, 'genesis');
+    }
