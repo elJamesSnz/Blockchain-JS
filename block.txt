@@ -1,0 +1,10 @@
+yarn init %Iniciar el proyecto
+yarn add @babel/core @babel/node @babel/preset-env --dev %Agregar depebdebcuas de Babel
+yarn add eslint eslint-config-airbnb-base eslint-plugin-import --dev %seguir sintaxis - guía
+yarn add nodemon --dev %para actualizar instancia en timepo real
+
+yarn nodemon %Correr con este comando de modo que actualice correctamente en tiempo real el index.js
+yarn start %ejecutar este en caso de no ser necesario el nodemon
+
+-------------------------------------------------------------------
+"lint": "eslint index.js src" es para detectar warnings o errores
