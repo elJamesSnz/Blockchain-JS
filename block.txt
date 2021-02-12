@@ -5,6 +5,6 @@ yarn add nodemon --dev %para actualizar instancia en timepo real
 
 yarn nodemon %Correr con este comando de modo que actualice correctamente en tiempo real el index.js
 yarn start %ejecutar este en caso de no ser necesario el nodemon
-
+yarn test:watch %para que esté ejecutando el test al guardar
 -------------------------------------------------------------------
 "lint": "eslint index.js src" es para detectar warnings o errores
