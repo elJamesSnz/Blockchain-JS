@@ -3,8 +3,23 @@ yarn add @babel/core @babel/node @babel/preset-env --dev %Agregar depebdebcuas d
 yarn add eslint eslint-config-airbnb-base eslint-plugin-import --dev %seguir sintaxis - guía
 yarn add nodemon --dev %para actualizar instancia en timepo real
 
+
 yarn nodemon %Correr con este comando de modo que actualice correctamente en tiempo real el index.js
 yarn start %ejecutar este en caso de no ser necesario el nodemon
 yarn test:watch %para que esté ejecutando el test al guardar
+
 -------------------------------------------------------------------
+
 "lint": "eslint index.js src" es para detectar warnings o errores
+
+---------------------------------------------------------------
+
+Para servicios HTTP
+
+yarn add express
+yarn add body-parser %middleware que serializa las peticiones
+
+curl http://localhost:3000/ %con el puerto 3000 (o el que se establezca arbitrariamente)
+%se realiza la petición al servicio http
+
+curl http://localhost:3000/blocks para solicitar el bloque
