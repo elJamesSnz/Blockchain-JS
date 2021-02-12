@@ -22,4 +22,22 @@ yarn add body-parser %middleware que serializa las peticiones
 curl http://localhost:3000/ %con el puerto 3000 (o el que se establezca arbitrariamente)
 %se realiza la petición al servicio http
 
-curl http://localhost:3000/blocks para solicitar el bloque
+curl http://localhost:3000/blocks %para solicitar el bloque
+
+---------------------------------------------------------------
+
+Para servicios WS websocket
+yarn add ws %Agrega el paquete en dependencias
+
+------------% PARA GENERAR NUEVO NODO BAJO OTRO PUERTO% %------------
+Desde Command Prompt: set PORT=puerto
+Desde Power Shell: $env:PORT=puerto
+Desde Bash (Windows): export PORT=
+
+%Para VS Code%
+$env:HTTP_PORT=3001
+$env:P2P_PORT=5001
+yarn start
+
+%En ese orden%
+
