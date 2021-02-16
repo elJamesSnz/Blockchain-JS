@@ -12,7 +12,7 @@ export default (blockchain) =>{
 
         //Se obtienen valores de la cadena blocks de la clase blockchain
         const{
-            previousHash, timestamp, Hash, data
+            previousHash, timestamp, Hash, data, nonce, difficulty
         } = blocks[i];
 
         //Se recupera el bloque en el index i para ser comparado
@@ -23,7 +23,7 @@ export default (blockchain) =>{
         //Se valida el hash de cada bloque de la cadena, esto afectaría si
         //se manda una cadena de bloques con el timestamp, previoushash o hash alterado/modificado
         //pues no se obtendría el mismo sha256
-        if(Hash !== Block._hash(timestamp, previousHash, data)) throw Error('Hash inválido');
+        if(Hash !== Block._hash(timestamp, previousHash, data, nonce, difficulty)) throw Error('Hash inválido');
         
     }
 

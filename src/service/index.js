@@ -13,7 +13,7 @@ const blockchain = new Blockchain();
 //Se crea una instancia de p2pservice y se le envía la cadena de bloques
 const p2pService = new P2PService(blockchain);
 
-blockchain.addBlock('bloque-Express');
+//blockchain.addBlock('bloque-Express');
 
 app.use(bodyParser.json());
 
@@ -26,6 +26,8 @@ app.get('/blocks', (req, res) =>{
 app.post('/mine', (req, res) => {
     const { body: { data }} = req;
     const block = blockchain.addBlock(data);
+
+    p2pService.sync();
 
     //Tras recibir la solicitud, hace la respuesta con la siguiente información
     res.json({

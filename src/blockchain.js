@@ -19,6 +19,11 @@ class Blockchain{
         return block;
     }
 
+    //Se compara la longitud de cadena del puerto al que se conecta con la que tiene el cliente-socket
+    //Si el cliente socket tiene una cadena más pequeña, se hace la sincronización de blockchain
+    //Si dentro de la sincronización hay un bloque con información incorrecta no se procede con la 
+    //sincronización
+
     replace(newBlocks = []){
         //comprobar la longitud de bloque
         if(newBlocks.length < this.blocks.length) throw Error('Cadena recibida no es más larga que la cadena actual.');

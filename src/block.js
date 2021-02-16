@@ -1,46 +1,64 @@
 import { SHA256 } from 'crypto-js';
+import adjustDiffuculty from './modules/adjustDifficulty';
+
+const ogDifficulty = 3;
 
 class Block{
-    constructor(timestamp, previousHash, Hash, data) //Método constructor
+    constructor(timestamp, previousHash, Hash, data, nonce, difficulty) //Método constructor
     {
         this.timestamp  = timestamp;
         this.previousHash  = previousHash;
         this.Hash  = Hash;
         this.data  = data;
+        this.nonce = nonce;
+        this.difficulty = difficulty;
     }
 
     static get genesis(){ //genera instancia del nodo bloque
         const timestamp = (new Date(2021, 0, 1).getTime());
-        return new this(timestamp, undefined, 'bloque-0', 'genesis');
+        return new this(timestamp, undefined, 'bloque-0', 'genesis', 0, ogDifficulty);
     }
 
     //función para agregar bloques a la blockchain
     static mine(previousBlock, data){
-        const timeStamp = Date.now();
         const  {Hash: previousHash} = previousBlock;
-        const hash = Block._hash(timeStamp, previousHash, data);
+        let hash;
+        let nonce = 0; //número base aleatorio
+        let timestamp;
+        let { difficulty } = previousBlock
 
-        return new this(timeStamp, previousHash, hash, data);
+        do{
+
+            timestamp = Date.now();
+            nonce += 1; //número aleatorio basado en el # de iteraciones
+            difficulty = adjustDiffuculty(previousBlock, timestamp)
+            hash = Block._hash(timestamp, previousHash, data, nonce, difficulty); //se genera el sha256
+        }while(hash.substring(0, difficulty) !== '0'.repeat(difficulty));
+
+        return new this(timestamp, previousHash, hash, data, nonce, difficulty);
     }
 
     //Se hace el cifrado y se obtiene la cadena de 32 bytes a partir de los datos de la blockchain y el timestamp
-    static _hash(timestamp, previoushash, data){
+    static _hash(timestamp, previoushash, data, nonce, difficulty){
 
-        return SHA256(`${timestamp}${previoushash}${data}`).toString();
+        return SHA256(`${timestamp}${previoushash}${data}${nonce}${difficulty}`).toString();
     }
 
     toString(){
         const{
-            timestamp, previousHash, Hash, data
+            timestamp, previousHash, Hash, data, nonce, difficulty
         } = this;
 
         return `Block -
         timestamp ---------> ${timestamp}
         previousHash ---------> ${previousHash}
         Hash ---------> ${Hash}
-        data ---------> ${data}        
+        data ---------> ${data}
+        nonce ---------> ${nonce}
+        difficulty ---------> ${difficulty} 
         `;
     }
 }
 
+export { ogDifficulty };
 export default Block; //Se exporta la clase

@@ -5,6 +5,7 @@ import Block from '../block';
 const  { P2P_PORT = 5000, PEERS } = process.env; 
 //lista de sockets: PEERS
 const peers = PEERS ? PEERS.split(',') : []; //ternaria: por si no es una lista de nodos a conectar
+const MSG = { BLOCKS: 'blocks' };
 
 class P2PService {
     
@@ -32,8 +33,22 @@ class P2PService {
     }
 
     onConnection(socket){
+        const { blockchain: { blocks } } = this; //obtiene cadena de bloques
         console.log('[ws:socket] conectado');
         this.sockets.push(socket);
+        console.log('Se intenta mostrar cadena');
+        socket.on('message', (message) =>{
+            const { type, value} = JSON.parse(message);
+            console.log({type, value});
+        });
+        
+        socket.send(JSON.stringify({type: MSG.BLOCKS, value: blocks})) //recibe una cadena string
+    }
+
+    broadcast(type, value){
+        console.log(`[ws:broadcast] ${type}...`);
+        const msg = JSON.stringify({ type, value});
+        this.sockets.forEach((socket) => socket.send(msg)); // se recorren los sockets conectados y se envía el mensaje
     }
 }
 
