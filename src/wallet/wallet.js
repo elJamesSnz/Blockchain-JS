@@ -1,6 +1,7 @@
-import Elliptic from 'elliptic'; //Se importa la librería elliptic
-const INITIAL_BALANCE = 100; //Balance inicial para todas las cuentas
-const ec = new Elliptic.ec('secp256k1'); //tipología de parámetros para la curva
+import { elliptic, hash } from '../Tools';
+
+const INITIAL_BALANCE = 100;
+ //Balance inicial para todas las cuentas //tipología de parámetros para la curva
 //SECP - parámetros para la curva elíptica - Standard for efficenty criptography
 
 class Wallet{
@@ -8,7 +9,7 @@ class Wallet{
         this.balance = INITIAL_BALANCE;
 
         //Aquí se genera la keypair
-        this.keyPair = ec.genKeyPair();
+        this.keyPair = elliptic.createKeyPair();
         //Se genera la clave pública a partir de la keypair usando su método get public
         //Se codifica en formato hex
         this.publicKey = this.keyPair.getPublic().encode('hex');
@@ -22,6 +23,12 @@ class Wallet{
         publicKey ------------> ${publicKey.toString()}
         balance   ------------> ${balance}
         `;
+    }
+
+    //método para firmar cualquier tipo de dato
+    sign(data){
+
+        return this.keyPair.sign(hash(data));
     }
 
 }

@@ -51,7 +51,7 @@ describe('Block', () => {
         //Se realiza hash256 con los datos de test
         hash = Block._hash(timestamp, previousBlock.Hash, data, nonce);
         //Para el bloque esperado previamente probado,  sale el siguiente timestamp
-        const hashOutput = '6d637a7dd633b370c5654b9ccbd61a5856ed713cc07731745981d86721751027';
+        const hashOutput = '8b32fb19acc27b45a7336c3fbd29917c014f6de9e2813818d70e52d0bfdeda0c';
         expect(hash).toEqual(hashOutput);
     });
     

@@ -5,5 +5,6 @@ PublicKey
 
 Elliptic curve - Utiliza matemáticas avanzadas para generar una curva elíptica para generar claves más cortas y proporcionan mayor seguridad
 
-------------% PARA INSTALAR ELLIPTIC CURVE %------------
-yarn add elliptic 
+------------% PARA WALLET %------------
+yarn add elliptic %curva elipiica que permite la generacion de claves publicas y privadas
+yarn add uuid %universal unique identification

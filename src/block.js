@@ -1,5 +1,6 @@
 import { SHA256 } from 'crypto-js';
 import adjustDiffuculty from './modules/adjustDifficulty';
+import genHash from './Tools/hash';
 
 const ogDifficulty = 3;
 
@@ -41,7 +42,7 @@ class Block{
     //Se hace el cifrado y se obtiene la cadena de 32 bytes a partir de los datos de la blockchain y el timestamp
     static _hash(timestamp, previoushash, data, nonce, difficulty){
 
-        return SHA256(`${timestamp}${previoushash}${data}${nonce}${difficulty}`).toString();
+        return genHash(`${timestamp}${previoushash}${data}${nonce}${difficulty}`);
     }
 
     toString(){
