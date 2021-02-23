@@ -1,10 +1,14 @@
 import Block from './block';
+import MemoryPool from './MemoryPool';
 import validate from './modules/validate';
+
 class Blockchain{
 
     constructor(){
         //Cuando se ejectue el constructor se generará automáticamente el bloque génesis
         this.blocks = [Block.genesis];
+        //permite que cada blockchain cuente con un registro de transacciones pendientes
+        this.memoryPool = new MemoryPool(); 
     }
 
     addBlock(data){

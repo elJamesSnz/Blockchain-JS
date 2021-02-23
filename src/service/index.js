@@ -3,44 +3,53 @@ import express from 'express'
 import bodyParser from 'body-parser'
 
 import Blockchain from '../blockchain';
-import P2PService from './p2p';
+import P2PService, { MESSAGE } from './p2p';
+import Wallet from '../wallet';
 
 //para que escuche en un puerto por defecto
-const  { HTTP_PORT = 3000} = process.env;
+const { HTTP_PORT = 3000 } = process.env;
 
 const app = express();
 const blockchain = new Blockchain();
-//Se crea una instancia de p2pservice y se le envía la cadena de bloques
+const wallet = new Wallet(blockchain);
 const p2pService = new P2PService(blockchain);
-
-//blockchain.addBlock('bloque-Express');
 
 app.use(bodyParser.json());
 
-//Para obtener los bloques minados
-app.get('/blocks', (req, res) =>{
-    res.json(blockchain.blocks);
+app.get('/blocks', (req, res) => {
+  res.json(blockchain.blocks);
 });
 
-//Para recibir la solicit de minar
 app.post('/mine', (req, res) => {
-    const { body: { data }} = req;
-    const block = blockchain.addBlock(data);
+  const { body: { data } } = req;
+  const block = blockchain.addBlock(data);
 
-    p2pService.sync();
+  p2pService.sync();
 
-    //Tras recibir la solicitud, hace la respuesta con la siguiente información
-    res.json({
-        blocks: blockchain.blocks.length,
-        block    
-    });
+  res.json({
+    blocks: blockchain.blocks.length,
+    block,
+  });
+});
 
-})
+app.get('/transactions', (req, res) => {
+  const { memoryPool: { transactions } } = blockchain;
+  res.json(transactions);
+});
 
-//Se pone a esuchcar solicitudes
-app.listen(HTTP_PORT, ()=>{
+app.post('/transaction', (req, res) => {
+  const { body: { recipient, amount } } = req;
 
-    console.log(`Servicio HTTP: ${HTTP_PORT} escuchando...`);    
-    p2pService.listen();
+  try {
+    const tx = wallet.createTransaction(recipient, amount);
+    p2pService.broadcast(MESSAGE.TX, tx);
+    res.json(tx);
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
 
+app.listen(HTTP_PORT, () => {
+  console.log(`Service HTTP:${HTTP_PORT} listening...`);
+  p2pService.listen();
 });
