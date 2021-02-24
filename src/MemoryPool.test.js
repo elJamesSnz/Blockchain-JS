@@ -42,4 +42,10 @@ describe('MemoryPool', () => {
 
     });
 
+    it('Borrar transacciones', () =>{
+        //Borra las transaccións
+        memoryPool.wipe();
+        expect(memoryPool.transactions.length).toEqual(0);
+    });
+
 });

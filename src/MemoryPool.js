@@ -27,6 +27,10 @@ class MemoryPool{
         //Se busca una transacción con la dirección pública
         return this.transactions.find(({ input }) => input.address === address);
     }
+
+    wipe(){
+        this.transactions = [];
+    }
 }
 
 export default MemoryPool;

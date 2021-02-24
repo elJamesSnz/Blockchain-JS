@@ -1,5 +1,6 @@
-import { elliptic, hash } from '../Tools';
+
 import Transaction from './transaction';
+import { elliptic, hash } from '../Tools';
 
 const INITIAL_BALANCE = 100;
  //Balance inicial para todas las cuentas //tipología de parámetros para la curva
@@ -61,3 +62,4 @@ class Wallet{
 
 export { INITIAL_BALANCE };
 export default Wallet;
+

@@ -2,6 +2,8 @@
 import { v1 as uuidV1 } from 'uuid';
 import { elliptic } from '../Tools';
 
+const REWARD = 1;
+
 class Transaction
 {
     /*
@@ -92,10 +94,15 @@ class Transaction
         //Al ser un objeto de instancia, this, sirve para realizar el input de la misma transaccion que generamos
         this.input = Transaction.sign(this, senderwallet);
 
-        //devuelbe la transacción actualizada
+        //devuelve la transacción actualizada
         return this;
     }
 
+
+    static reward(minerWallet, blockchainWallet){
+        return this.create(blockchainWallet, minerWallet.publicKey, REWARD);
+    }
 }
 
+export { REWARD };
 export default Transaction;
