@@ -1,6 +1,7 @@
 //import { blockchainWallet, Transaction } from "../wallet";
-/*
+
 import { Transaction, blockchainWallet } from '../wallet';
+import { MESSAGE } from '../service/p2p'
 
 class Miner{
     //wallet del minero para darle el reward
@@ -29,41 +30,10 @@ class Miner{
         //Se borran las transacciones del memory pool
         memoryPool.wipe();
 
+        p2pService.broadcast(MESSAGE.WIPE);
+
        return block;
     }
-}
-
-export default Miner;
-
-*/
-import { Transaction, blockchainWallet } from '../wallet';
-
-class Miner {
-  constructor(blockchain, p2pService, wallet) {
-    this.blockchain = blockchain;
-    this.p2pService = p2pService;
-    this.wallet = wallet;
-  }
-
-  mine() {
-    const {
-      blockchain: { memoryPool },
-      p2pService,
-      wallet,
-    } = this;
-
-    if (memoryPool.transactions.length === 0) throw Error('There are no unconfirmed transactions.');
-
-    /*
-    5. broadcast wipe message to every node
-    */
-    memoryPool.transactions.push(Transaction.reward(wallet, blockchainWallet));
-    const block = this.blockchain.addBlock(memoryPool.transactions);
-    p2pService.sync();
-    memoryPool.wipe();
-
-    return block;
-  }
 }
 
 export default Miner;

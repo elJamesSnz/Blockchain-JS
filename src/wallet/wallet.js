@@ -7,8 +7,11 @@ const INITIAL_BALANCE = 100;
 //SECP - parámetros para la curva elíptica - Standard for efficenty criptography
 class Wallet{
     
-    constructor(blockchain){
+    constructor(blockchain, newbalance){        
         this.balance = INITIAL_BALANCE;
+        if(newbalance){ //si está definido, lo cambia al que se envió
+            this.balance = newbalance;
+        }
         //Aquí se genera la keypair
         this.keyPair = elliptic.createKeyPair();
         //Se genera la clave pública a partir de la keypair usando su método get public
@@ -35,7 +38,8 @@ class Wallet{
 
     createTransaction(recipientAddress, amount){
         //Se descompone el balance y su blockchain de esta instancia de wallet
-        const {balance, blockchain: {memoryPool}} = this;
+        const { blockchain: {memoryPool}} = this;
+        const balance = this.calculateBalance();
         //Se verifica que sea un monto válido
         if(amount > balance) throw Error(`Monto ${amount} excede el balance ${balance}`);
         
@@ -50,12 +54,45 @@ class Wallet{
             //Si no existe, se crea una nueva transacción enviando:
             //esta instancia de wallet, dirección del receptor y monto
             tx = Transaction.create(this, recipientAddress, amount);
-
+            console.log(tx);
             //Se realiza la actualización en el memorypool
             memoryPool.addOrUpdate(tx);
         }
 
         return tx;
+    }
+
+    calculateBalance(){
+        const { blockchain: { blocks = []}, publicKey} = this;
+        let { balance } = this;
+        let timestamp = 0;
+        const txs = []; //transacciones que se han tenido en nuestra blockchain
+
+        blocks.forEach(( { data = []}) => {
+            if(Array.isArray(data)) data.forEach((tx) => txs.push(tx)); 
+        });
+
+
+        const walletInputs = txs.filter((tx) => tx.input.address === publicKey);
+
+        if(walletInputs.length > 0 ){
+            const recentInputTx = walletInputs
+                .sort((a, b) => a.input.timestamp - b.input.timestamp)
+                .pop(); //para sacar el ultimo elemento
+
+            balance = recentInputTx.outputs.find(({ address }) => address === publicKey).amount;
+            timestamp = recentInputTx.input.timestamp;
+        }
+
+        txs
+        .filter(({ input }) => input.timestamp > timestamp)
+        .forEach(({ outputs }) => {
+            outputs.find(({address, amount}) =>{
+                if(address === publicKey) balance += amount;
+            });
+        });
+
+        return balance;
     }
 
 }
